@@ -39,7 +39,7 @@ indent = { tab-width = 2, unit = "  " }
 
 [[grammar]]  
 name = "lumelf"  
-source = { git = "https://github.com/superiums/tree-sitter-lumelf", rev = "v0.0.1" }
+source = { git = "https://github.com/superiums/tree-sitter-lumelf", rev = "v0.13.1" }
 ```
 
 add shebang or rename `lfrc` to `lfrc.lmf` to get highlight
