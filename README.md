@@ -21,3 +21,23 @@ cmd toggle-preview %{{
 }}
 map zp toggle-preview
 ```
+
+## for Helix Editor
+
+```toml
+[[language]]
+name = "lumelf"
+scope = "source.lumelf"
+injection-regex = "lumelf"
+file-types = ["lmf"]
+roots = []
+comment-token = "#"
+indent = { tab-width = 2, unit = "  " }
+# grammar = "lumesh.wasm"
+
+[[grammar]]  
+name = "lumelf"  
+source = { git = "https://github.com/superiums/tree-sitter-lumelf", rev = "v0.0.1" }
+```
+
+rename `lfrc` to `lfrc.lmf` to get highlight
