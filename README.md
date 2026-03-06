@@ -25,7 +25,10 @@ map zp toggle-preview
 
 ## for Helix Editor
 
+- add language def
 ```toml
+use-grammars = { only = [ "lumesh","lumelf" ] }  
+
 [[language]]
 name = "lumelf"
 scope = "source.lumelf"
@@ -42,4 +45,10 @@ name = "lumelf"
 source = { git = "https://github.com/superiums/tree-sitter-lumelf", rev = "v0.13.1" }
 ```
 
+- run build cmd:
+```bash
+hx --grammar build
+```
+
+- usage
 add shebang or rename `lfrc` to `lfrc.lmf` to get highlight
