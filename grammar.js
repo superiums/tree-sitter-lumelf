@@ -1,5 +1,5 @@
 /**
- * @file lumesh tree-sitter grammar
+ * @file lumelf tree-sitter grammar
  * @author santo
  * @license MIT
  */
@@ -8,7 +8,7 @@
 // @ts-check
 
 module.exports = grammar({
-  name: 'lumesh',
+  name: 'lumelf',
   word: ($) => $.symbol,
   extras: ($) => [/[ \t]/, /\\\n/, $.comment],
 
@@ -31,9 +31,13 @@ module.exports = grammar({
     [$.command_expr, $.command_argument],
     [$.command_argument, $._primary_expr],
     [$.command_argument, $._expression],
+    // lf
+    [$.lf_map, $._lf_stroke],
+    [$.lf_pipe, $.variable],
   ],
 
   precedences: ($) => [
+    [$.lf_cmd_def, $.lf_map, $.lf_set, $.comment, $.lf_bare_cmd],
     [$.control_flow],
     [$.group_expr],
     [$._primary_expr],
@@ -62,7 +66,81 @@ module.exports = grammar({
   ],
 
   rules: {
-    lumesh: ($) => seq(optional(repeat('\n')), repeat($._statements)),
+    lumelf: ($) => seq(optional(repeat('\n')), repeat($._lf_statement)),
+
+    _lf_statement: ($) =>
+      seq(
+        choice($.lf_cmd_def, $.lf_map, $.lf_set, $.comment, $.lf_bare_cmd),
+        repeat1('\n'),
+      ),
+    lf_cmd_def: ($) =>
+      seq('cmd', field('name', $.symbol), field('lf_body', $.lf_cmd_body)),
+    lf_cmd_body: ($) =>
+      seq(
+        $.lf_pipe,
+        field(
+          'body',
+          choice(
+            seq(
+              '{{',
+              optional('\n'),
+              field(
+                'content',
+                repeat($._statements),
+                optional($._statement_inline),
+              ),
+              '}}',
+            ),
+            // inline
+            seq($._statement_inline),
+          ),
+        ),
+      ),
+    lf_bare_cmd: ($) => seq($.lf_pipe, $._expression),
+    lf_pipe: ($) => field('lf_pipe', choice('$', '&', '%', '!', ':')),
+    lf_map: ($) =>
+      seq(
+        'map',
+        $._lf_stroke,
+        optional(
+          choice(
+            // normal cmd
+            seq(
+              optional($.lf_pipe),
+              sepBy1(
+                ';',
+                seq(
+                  field('lf_cmd', $.symbol),
+                  field('lf_arg', repeat(choice($.symbol, $.variable))),
+                ),
+              ),
+            ),
+            // push keystroke
+            seq(
+              'push',
+              optional($.lf_pipe),
+              sepBy1(
+                ';',
+                repeat1(choice($.symbol, $.variable, $._lf_stroke, $.integer)),
+              ),
+            ),
+            // $._lf_cmd_body,
+          ),
+        ),
+      ),
+    _lf_stroke: ($) =>
+      field('lf_stroke', choice($.symbol, seq('<', $.symbol, '>'))),
+    lf_set: ($) =>
+      seq(
+        'set',
+        field('item', $.symbol),
+        optional(
+          field(
+            'value',
+            choice($.string, $.string_raw, $.integer, $.boolean, $.path_arg),
+          ),
+        ),
+      ),
 
     _statements: ($) =>
       seq(
@@ -478,6 +556,7 @@ module.exports = grammar({
               seq(
                 '\\',
                 choice(
+                  '0', //\033 ansi code
                   '"',
                   '\\',
                   '/',

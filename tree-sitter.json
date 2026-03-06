@@ -2,24 +2,24 @@
   "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/config.schema.json",
   "grammars": [
     {
-      "name": "lumesh",
-      "camelcase": "LumeSh",
-      "title": "Lumesh",
-      "scope": "source.lumesh",
-      "file-types": ["lm", "lume", "lumesh"],
-      "injection-regex": "^lume(sh)?$",
-      "class-name": "TreeSitterLumesh",
+      "name": "lumelf",
+      "camelcase": "lumelf",
+      "title": "lumelf",
+      "scope": "source.lumelf",
+      "file-types": ["lmf"],
+      "injection-regex": "^lumelf$",
+      "class-name": "TreeSitterlumelf",
       "highlights": "queries/highlights.scm",
       "locals": "queries/locals.scm",
       "tags": "queries/tags.scm",
       "brackets": "queries/brackets.scm",
-      "first-line-regex": "^#!.*\\b(lm|lume|lumesh)\\b.*$"
+      "first-line-regex": "^#!.*\\b(lumelf)\\b.*$"
     }
   ],
   "metadata": {
     "version": "0.1.0",
     "license": "MIT",
-    "description": "a lighting shell",
+    "description": "lfrc via lumesh",
     "authors": [
       {
         "name": "santo",
@@ -27,7 +27,7 @@
       }
     ],
     "links": {
-      "repository": "https://codeberg.org/santo/lumesh"
+      "repository": "https://codeberg.org/santo/lumelf"
     }
   },
   "bindings": {

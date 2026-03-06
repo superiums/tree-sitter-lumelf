@@ -5,6 +5,8 @@ name: (symbol) @name) @definition.function
 ; 函数调用
 (function_call
 func: (symbol) @name) @reference.call
+(lf_map
+lf_cmd: (symbol) @name) @reference.call
 
 ; 命令表达式
 (command_expr

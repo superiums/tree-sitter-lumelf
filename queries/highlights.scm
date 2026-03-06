@@ -19,6 +19,7 @@
 ; Declaration keywords
 [
 "fn"
+"cmd"
 ] @keyword.function
 
 ; Import/module keywords
@@ -28,6 +29,7 @@
 "export"
 "alias"
 "del"
+"map"
 ] @keyword.directive
 
 ; Loop-specific keywords
@@ -119,6 +121,8 @@
 ] @punctuation.bracket.square
 
 [
+"{{"
+"}}"
 "{"
 "}"
 ] @punctuation.bracket.curly
@@ -143,6 +147,20 @@
 [
 "`"
 ] @punctuation.definition.template
+
+; [
+;   "$"
+;   "&"
+;   "%"
+;   "!"
+;   ":"
+; ] @punctuation.pipe
+; lf special
+(lf_cmd_def
+  name: (symbol) @function.definition)
+(lf_pipe) @operator.pipe
+(lf_map
+  lf_cmd: (symbol) @function.call)
 
 ; Range 运算符
 (range_expr

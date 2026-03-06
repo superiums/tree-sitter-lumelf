@@ -17,6 +17,8 @@ var_collect: (symbol) @local.definition)
 ; 函数名定义
 (function_def
 name: (symbol) @local.definition)
+(lf_cmd_def
+name: (symbol) @local.definition)
 
 ; Lambda参数定义
 (lambda_params

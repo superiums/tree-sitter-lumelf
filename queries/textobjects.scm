@@ -3,6 +3,9 @@
 (function_def) @function.around
 (function_def
 body: (_) @function.inside)
+(lf_cmd_def) @function.around
+(lf_cmd_body
+body: (_) @function.inside)
 ; (function_def
 ; name: (symbol) @function.movement)
 

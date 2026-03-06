@@ -1,9 +1,9 @@
 {
   "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/grammar.schema.json",
-  "name": "lumesh",
+  "name": "lumelf",
   "word": "symbol",
   "rules": {
-    "lumesh": {
+    "lumelf": {
       "type": "SEQ",
       "members": [
         {
@@ -25,8 +25,471 @@
           "type": "REPEAT",
           "content": {
             "type": "SYMBOL",
-            "name": "_statements"
+            "name": "_lf_statement"
           }
+        }
+      ]
+    },
+    "_lf_statement": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "lf_cmd_def"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "lf_map"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "lf_set"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "comment"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "lf_bare_cmd"
+            }
+          ]
+        },
+        {
+          "type": "REPEAT1",
+          "content": {
+            "type": "STRING",
+            "value": "\n"
+          }
+        }
+      ]
+    },
+    "lf_cmd_def": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "cmd"
+        },
+        {
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "symbol"
+          }
+        },
+        {
+          "type": "FIELD",
+          "name": "lf_body",
+          "content": {
+            "type": "SYMBOL",
+            "name": "lf_cmd_body"
+          }
+        }
+      ]
+    },
+    "lf_cmd_body": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "lf_pipe"
+        },
+        {
+          "type": "FIELD",
+          "name": "body",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "STRING",
+                    "value": "{{"
+                  },
+                  {
+                    "type": "CHOICE",
+                    "members": [
+                      {
+                        "type": "STRING",
+                        "value": "\n"
+                      },
+                      {
+                        "type": "BLANK"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "FIELD",
+                    "name": "content",
+                    "content": {
+                      "type": "REPEAT",
+                      "content": {
+                        "type": "SYMBOL",
+                        "name": "_statements"
+                      }
+                    }
+                  },
+                  {
+                    "type": "STRING",
+                    "value": "}}"
+                  }
+                ]
+              },
+              {
+                "type": "SEQ",
+                "members": [
+                  {
+                    "type": "SYMBOL",
+                    "name": "_statement_inline"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "lf_bare_cmd": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "lf_pipe"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_expression"
+        }
+      ]
+    },
+    "lf_pipe": {
+      "type": "FIELD",
+      "name": "lf_pipe",
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "$"
+          },
+          {
+            "type": "STRING",
+            "value": "&"
+          },
+          {
+            "type": "STRING",
+            "value": "%"
+          },
+          {
+            "type": "STRING",
+            "value": "!"
+          },
+          {
+            "type": "STRING",
+            "value": ":"
+          }
+        ]
+      }
+    },
+    "lf_map": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "map"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_lf_stroke"
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "CHOICE",
+              "members": [
+                {
+                  "type": "SEQ",
+                  "members": [
+                    {
+                      "type": "CHOICE",
+                      "members": [
+                        {
+                          "type": "SYMBOL",
+                          "name": "lf_pipe"
+                        },
+                        {
+                          "type": "BLANK"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "SEQ",
+                      "members": [
+                        {
+                          "type": "SEQ",
+                          "members": [
+                            {
+                              "type": "FIELD",
+                              "name": "lf_cmd",
+                              "content": {
+                                "type": "SYMBOL",
+                                "name": "symbol"
+                              }
+                            },
+                            {
+                              "type": "FIELD",
+                              "name": "lf_arg",
+                              "content": {
+                                "type": "REPEAT",
+                                "content": {
+                                  "type": "CHOICE",
+                                  "members": [
+                                    {
+                                      "type": "SYMBOL",
+                                      "name": "symbol"
+                                    },
+                                    {
+                                      "type": "SYMBOL",
+                                      "name": "variable"
+                                    }
+                                  ]
+                                }
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "type": "REPEAT",
+                          "content": {
+                            "type": "SEQ",
+                            "members": [
+                              {
+                                "type": "STRING",
+                                "value": ";"
+                              },
+                              {
+                                "type": "SEQ",
+                                "members": [
+                                  {
+                                    "type": "FIELD",
+                                    "name": "lf_cmd",
+                                    "content": {
+                                      "type": "SYMBOL",
+                                      "name": "symbol"
+                                    }
+                                  },
+                                  {
+                                    "type": "FIELD",
+                                    "name": "lf_arg",
+                                    "content": {
+                                      "type": "REPEAT",
+                                      "content": {
+                                        "type": "CHOICE",
+                                        "members": [
+                                          {
+                                            "type": "SYMBOL",
+                                            "name": "symbol"
+                                          },
+                                          {
+                                            "type": "SYMBOL",
+                                            "name": "variable"
+                                          }
+                                        ]
+                                      }
+                                    }
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "SEQ",
+                  "members": [
+                    {
+                      "type": "STRING",
+                      "value": "push"
+                    },
+                    {
+                      "type": "CHOICE",
+                      "members": [
+                        {
+                          "type": "SYMBOL",
+                          "name": "lf_pipe"
+                        },
+                        {
+                          "type": "BLANK"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "SEQ",
+                      "members": [
+                        {
+                          "type": "REPEAT1",
+                          "content": {
+                            "type": "CHOICE",
+                            "members": [
+                              {
+                                "type": "SYMBOL",
+                                "name": "symbol"
+                              },
+                              {
+                                "type": "SYMBOL",
+                                "name": "variable"
+                              },
+                              {
+                                "type": "SYMBOL",
+                                "name": "_lf_stroke"
+                              },
+                              {
+                                "type": "SYMBOL",
+                                "name": "integer"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "type": "REPEAT",
+                          "content": {
+                            "type": "SEQ",
+                            "members": [
+                              {
+                                "type": "STRING",
+                                "value": ";"
+                              },
+                              {
+                                "type": "REPEAT1",
+                                "content": {
+                                  "type": "CHOICE",
+                                  "members": [
+                                    {
+                                      "type": "SYMBOL",
+                                      "name": "symbol"
+                                    },
+                                    {
+                                      "type": "SYMBOL",
+                                      "name": "variable"
+                                    },
+                                    {
+                                      "type": "SYMBOL",
+                                      "name": "_lf_stroke"
+                                    },
+                                    {
+                                      "type": "SYMBOL",
+                                      "name": "integer"
+                                    }
+                                  ]
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        }
+      ]
+    },
+    "_lf_stroke": {
+      "type": "FIELD",
+      "name": "lf_stroke",
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "SYMBOL",
+            "name": "symbol"
+          },
+          {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "STRING",
+                "value": "<"
+              },
+              {
+                "type": "SYMBOL",
+                "name": "symbol"
+              },
+              {
+                "type": "STRING",
+                "value": ">"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "lf_set": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "set"
+        },
+        {
+          "type": "FIELD",
+          "name": "item",
+          "content": {
+            "type": "SYMBOL",
+            "name": "symbol"
+          }
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "FIELD",
+              "name": "value",
+              "content": {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "SYMBOL",
+                    "name": "string"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "string_raw"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "integer"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "boolean"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "path_arg"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
         }
       ]
     },
@@ -2033,6 +2496,10 @@
                     {
                       "type": "CHOICE",
                       "members": [
+                        {
+                          "type": "STRING",
+                          "value": "0"
+                        },
                         {
                           "type": "STRING",
                           "value": "\""
@@ -4155,9 +4622,39 @@
     [
       "command_argument",
       "_expression"
+    ],
+    [
+      "lf_map",
+      "_lf_stroke"
+    ],
+    [
+      "lf_pipe",
+      "variable"
     ]
   ],
   "precedences": [
+    [
+      {
+        "type": "SYMBOL",
+        "name": "lf_cmd_def"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "lf_map"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "lf_set"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "comment"
+      },
+      {
+        "type": "SYMBOL",
+        "name": "lf_bare_cmd"
+      }
+    ],
     [
       {
         "type": "SYMBOL",
