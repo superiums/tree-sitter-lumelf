@@ -4,6 +4,7 @@ tree-sitter for [lf filemanager](https://github.com/gokcehan/lf) configed with [
 start with the following cmd to write lf config with lume:
 
 ```bash
+#! lumelf
 set ifs '\n'
 set shellopts '-sM'
 set shell /usr/bin/lume
@@ -29,15 +30,16 @@ map zp toggle-preview
 name = "lumelf"
 scope = "source.lumelf"
 injection-regex = "lumelf"
+shebangs = ["lumelf"]
+
 file-types = ["lmf"]
 roots = []
 comment-token = "#"
 indent = { tab-width = 2, unit = "  " }
-# grammar = "lumesh.wasm"
 
 [[grammar]]  
 name = "lumelf"  
 source = { git = "https://github.com/superiums/tree-sitter-lumelf", rev = "v0.0.1" }
 ```
 
-rename `lfrc` to `lfrc.lmf` to get highlight
+add shebang or rename `lfrc` to `lfrc.lmf` to get highlight
